@@ -22,7 +22,6 @@ ENV PATH=/root/.local/bin:$PATH
 # Copy application source code & trained model artifacts
 COPY api/ ./api/
 COPY models/ ./models/
-COPY data/processed/train.parquet ./data/processed/train.parquet
 
 ENV PORT=8000
 EXPOSE 8000
