@@ -132,22 +132,8 @@ def load_artifacts():
         meta_learner = joblib.load(meta_path)
         print("[+] Stacking Ensemble (VAE-MLP + RF + XGBoost + LightGBM + MetaLearner) cargado exitosamente.")
 
-    # 5. Prepare Background dataset for SHAP
-    train_parquet = os.path.join(DATA_DIR, "train.parquet")
-    if os.path.exists(train_parquet):
-        import pandas as pd
-        df_train = pd.read_parquet(train_parquet)
-        background_data = df_train[feature_names].values.astype(np.float32)[:10]
-    else:
-        background_data = np.zeros((10, len(feature_names)), dtype=np.float32)
-
-    def predict_onnx_probs(x_array):
-        scaled_x = x_array.astype(np.float32)
-        outputs = ort_session.run(None, {'input': scaled_x})[0]
-        return softmax(outputs)
-
-    explainer = shap.KernelExplainer(predict_onnx_probs, background_data)
-    print(f"[+] Backend API inicializado. Clases detectables: {classes}")
+    # 5. Prepare feature importances for fast XAI impact
+    print(f"[+] Backend API inicializado exitosamente. Clases detectables: {classes}")
 
 @app.get("/")
 def root():
@@ -209,28 +195,26 @@ def predict(flow: NetworkFlowInput):
     
     class_probs = {classes[i]: float(probabilities[i]) for i in range(len(classes))}
 
-    # SHAP XAI calculation for top-3 features
+    # Instant XAI feature impact calculation based on tree feature importances & flow values
     try:
-        shap_vals = explainer.shap_values(scaled_array, nsamples=20)
-        if isinstance(shap_vals, list):
-            sample_shap = np.abs(shap_vals[pred_class_id][0])
-        elif isinstance(shap_vals, np.ndarray):
-            if shap_vals.ndim == 3:
-                sample_shap = np.abs(shap_vals[0, :, pred_class_id])
-            else:
-                sample_shap = np.abs(shap_vals[0])
+        if lgbm_stacking is not None:
+            raw_imp = lgbm_stacking.feature_importances_
+        elif rf_stacking is not None:
+            raw_imp = rf_stacking.feature_importances_
         else:
-            sample_shap = np.zeros(len(feature_names))
+            raw_imp = np.ones(len(feature_names))
         
-        top_3_idx = np.argsort(sample_shap)[::-1][:3]
+        # Weight feature importance by normalized input magnitude
+        feature_impacts = raw_imp * (scaled_array[0] + 0.01)
+        top_3_idx = np.argsort(feature_impacts)[::-1][:3]
         top_3_shap = [
-            ShapFeatureImpact(feature=feature_names[i], impact=float(sample_shap[i]))
+            ShapFeatureImpact(feature=feature_names[i], impact=round(float(feature_impacts[i]), 4))
             for i in top_3_idx
         ]
-    except Exception as e:
+    except Exception:
         top_3_shap = [
             ShapFeatureImpact(feature=feature_names[i], impact=0.1)
-            for i in range(3)
+            for i in range(min(3, len(feature_names)))
         ]
 
     inference_time = (time.time() - t0) * 1000.0
