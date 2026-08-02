@@ -171,7 +171,10 @@ st.markdown("""
 # SIDEBAR NAVIGATION & ENGINE CONFIGURATION
 # ------------------------------------------------------------------------------
 st.sidebar.markdown('<div style="font-size: 1.1rem; font-weight: 900; letter-spacing: 2px; color: #00F2FE; margin-bottom: 12px;">EDGEGUARD SYSTEM</div>', unsafe_allow_html=True)
-raw_api = os.getenv("API_URL", "http://localhost:8000")
+raw_api = os.getenv("API_URL", "http://localhost:8000").strip()
+if raw_api == "edgeguard-backend" or (not "." in raw_api and "localhost" not in raw_api and "127.0.0.1" not in raw_api):
+    raw_api = f"{raw_api}.onrender.com"
+
 if not raw_api.startswith("http://") and not raw_api.startswith("https://"):
     default_api_url = f"https://{raw_api}"
 else:
