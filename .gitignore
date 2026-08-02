@@ -22,3 +22,6 @@ ENV/
 # System files
 .DS_Store
 Thumbs.db
+documento/
+organize_and_build_readme.py
+
