@@ -13,7 +13,10 @@ RUN pip install --no-cache-dir --user -r requirements.txt
 # Stage 2: Final lightweight runner image
 FROM python:3.10-slim as runner
 
-WORKDIR /app
+# Install C++ OpenMP runtime for XGBoost & LightGBM
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libgomp1 \
+    && rm -rf /var/lib/apt/lists/*
 
 # Copy installed packages from builder
 COPY --from=builder /root/.local /root/.local
