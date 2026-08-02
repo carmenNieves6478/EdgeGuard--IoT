@@ -1,0 +1,11 @@
+\section{OBJETIVOS DEL PROYECTO DE INVESTIGACIÓN}
+
+\subsection{Objetivo General}
+Desarrollar y evaluar un Sistema Adaptativo de Detección de Botnets Multiclase basado en una arquitectura híbrida de Ensamble Stacking (componiendo un VAE-MLP cuantizado a INT8, Random Forest, XGBoost y LightGBM como clasificadores base de Nivel 0 y un Meta-Learner LightGBM en el Nivel 1) respaldado por explicabilidad SHAP XAI sobre el dataset CIC-IoT-2023.
+
+\subsection{Objetivos Específicos}
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{Objetivo Específico 1 (Preprocesamiento y Selección de Características)}: Realizar el preprocesamiento, limpieza, balanceo estratificado y selección estadística de las características predictivas del tráfico de red IoT utilizando las pruebas ANOVA F-Test, Mutual Information y la impureza de Gini de Random Forest.
+    \item \textbf{Objetivo Específico 2 (Diseño y Entrenamiento de la Arquitectura Híbrida)}: Diseñar y entrenar el modelo de Autoencoder Variacional (VAE-MLP) cuantizado a formato ONNX INT8, así como los clasificadores de árboles de decisión de Nivel 0 (Random Forest, XGBoost y LightGBM) optimizando las funciones de pérdida para datos desbalanceados.
+    \item \textbf{Objetivo Específico 3 (Construcción del Ensamble Stacking y Evaluación del Estado del Arte)}: Construir el ensamble Stacking impulsado por el Meta-Learner LightGBM y evaluar empíricamente su desempeño predictivo frente a los baselines del estado del arte mediante matrices de confusión, curvas ROC-AUC, Precision-Recall, validación cruzada de 5 pliegues (5-Fold CV) e interpretabilidad forense mediante SHAP XAI.
+\end{enumerate}

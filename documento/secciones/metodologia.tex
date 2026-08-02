@@ -1,0 +1,196 @@
+\section{METODOLOGÍA EXPERIMENTAL Y DISEÑO DEL SISTEMA}
+
+La presente sección describe de forma detallada y rigurosa la metodología experimental adoptada para el desarrollo y evaluación del sistema \textbf{EdgeGuard-IoT}. El marco metodológico se organiza en cinco fases secuenciales que abarcan desde el tratamiento inicial del tráfico de red hasta la construcción del ensamble de aprendizaje \textbf{Stacking Ensemble} y la evaluación frente al estado del arte.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[node distance=1.4cm and 1.8cm, auto, >=stealth,
+  phase/.style={rectangle, draw=unapblue, fill=softgray, thick, text width=13.5cm, align=left, rounded corners=4pt, inner sep=8pt},
+  title/.style={font=\bfseries\color{unapblue}}]
+  
+  \node [phase] (p1) {
+    \textbf{\color{unapblue} FASE 1: Análisis Exploratorio, Calidad de Datos y Selección Estadística} \\
+    {\small • Ingesta de 186,321 registros de tráfico CIC-IoT-2023 $\rightarrow$ Tratamiento de nulos e infinitos $\rightarrow$ Diccionario de datos $\rightarrow$ Pruebas ANOVA F-Test, Mutual Information y Gini Importance $\rightarrow$ Normalización \texttt{MinMaxScaler}.}
+  };
+  
+  \node [phase, below=0.5cm of p1] (p2) {
+    \textbf{\color{unapblue} FASE 2: Diseño de la Arquitectura del Ensamble Híbrido Stacking} \\
+    {\small • Definición del Autoencoder Variacional (VAE-MLP): Encoder (39$\rightarrow$64$\rightarrow$32), Espacio Latente $z$ (16 dims), Decoder (16$\rightarrow$32$\rightarrow$64$\rightarrow$39) y Clasificador MLP (16$\rightarrow$32$\rightarrow$16$\rightarrow$8) $\rightarrow$ Parametrización de clasificadores Nivel 0 (Random Forest, XGBoost, LightGBM).}
+  };
+  
+  \node [phase, below=0.5cm of p2] (p3) {
+    \textbf{\color{unapblue} FASE 3: Preprocesamiento, Entrenamiento GPU y Cuantificación ONNX INT8} \\
+    {\small • Divisón estratificada 70/15/15 $\rightarrow$ Entrenamiento VAE-MLP en GPU CUDA (40 épocas, \texttt{Class-Weighted Loss}) $\rightarrow$ Cuantificación dinámicas ONNX INT8 ($21.67\text{ KB}$, $3.25\mu\text{s}$) $\rightarrow$ Ajuste de clasificadores de árboles Nivel 0.}
+  };
+
+  \node [phase, below=0.5cm of p3] (p4) {
+    \textbf{\color{unapblue} FASE 4: Meta-Aprendizaje Stacking y Validación Cruzada 5-Fold} \\
+    {\small • Construcción de la matriz de metacaracterísticas $\mathbf{M} \in \mathbb{R}^{N \times 32} \rightarrow$ Entrenamiento del Meta-Learner LightGBM Nivel 1 $\rightarrow$ Validación cruzada de 5 pliegues ($76.52\% \pm 0.18\%$) $\rightarrow$ Ajuste de umbrales de decisión (Threshold Tuning).}
+  };
+
+  \node [phase, below=0.5cm of p4] (p5) {
+    \textbf{\color{unapblue} FASE 5: Evaluación Comparativa Estado del Arte y Explicabilidad SHAP} \\
+    {\small • Evaluación empírica sobre 27,949 muestras de prueba $\rightarrow$ Comparativa frente a 6 baselines del estado del arte $\rightarrow$ Análisis de Trade-Off (Latencia vs Tamaño vs F1) $\rightarrow$ Atribución de importancia SHAP XAI.}
+  };
+  
+  \draw[->, ultra thick, unapblue] (p1) -- (p2);
+  \draw[->, ultra thick, unapblue] (p2) -- (p3);
+  \draw[->, ultra thick, unapblue] (p3) -- (p4);
+  \draw[->, ultra thick, unapblue] (p4) -- (p5);
+\end{tikzpicture}
+\caption{Pipeline metodológico completo de 5 fases ejecutado en el proyecto EdgeGuard-IoT.}
+\label{fig:pipeline_5fases_completo}
+\end{figure}
+
+% ──────────────────────────────────────────────────────────
+% FASE 1
+% ──────────────────────────────────────────────────────────
+\subsection{Fase 1: Análisis Exploratorio, Calidad de Datos y Selección Estadística de Características}
+
+\subsubsection{Ingesta y Limpieza de Tráfico de Red IoT}
+El conjunto de datos bruto CIC-IoT-2023 consta de 63 archivos CSV comprimidos con millones de registros de tráfico de red. Para garantizar la viabilidad computacional, se implementó un procedimiento de ingesta por fragmentos (\textit{chunking}) procesando paquetes de $50,000$ filas.
+
+Se aplicaron los siguientes filtros de limpieza estricta:
+\begin{enumerate}
+    \item \textbf{Imputación y Filtrado de Inconsistencias}: Eliminación de registros con valores nulos (\texttt{NaN}) o representaciones de infinito positivo/negativo (\texttt{inf}, \texttt{-inf}) en variables volumétricas de tasa y varianza.
+    \item \textbf{Eliminación de Duplicados}: Descarte de registros idénticos de flujo de red para prevenir la contaminación de datos entre particiones.
+    \item \textbf{Muestreo Balanceado Estratificado}: Para solucionar el sesgo natural hacia ataques DDoS masivos, se extrajo una muestra estratificada de $186,321$ registros representando de forma equilibrada el tráfico benigno y las 7 categorías de ataques botnet.
+\end{enumerate}
+
+\subsubsection{Diccionario Formal de Datos}
+Se construyó un diccionario formal clasificando las 39 características predictivas de flujo de red en métricas de cabecera, flags TCP, protocolos de capa de aplicación, estadísticas acumuladas e intervalos entre llegadas (IAT).
+
+\begin{table}[H]
+\centering
+\caption{Resumen del Diccionario de Datos del Tráfico de Red (CIC-IoT-2023)}
+\label{tab:diccionario_resumen}
+\small
+\begin{tabular}{llp{7.5cm}}
+\toprule
+\textbf{Categoría de Variable} & \textbf{Cantidad} & \textbf{Variables Incluidas} \\
+\midrule
+Cabecera y Transporte & 4 & \texttt{Header\_Length}, \texttt{Protocol Type}, \texttt{Time\_To\_Live}, \texttt{Rate} \\
+Banderas TCP (Flags) & 7 & \texttt{fin\_flag}, \texttt{syn\_flag}, \texttt{rst\_flag}, \texttt{psh\_flag}, \texttt{ack\_flag}, \texttt{ece\_flag}, \texttt{cwr\_flag} \\
+Conteos de Banderas & 4 & \texttt{ack\_count}, \texttt{syn\_count}, \texttt{fin\_count}, \texttt{rst\_count} \\
+Protocolos Aplicación & 15 & \texttt{HTTP}, \texttt{HTTPS}, \texttt{DNS}, \texttt{Telnet}, \texttt{SMTP}, \texttt{SSH}, \texttt{IRC}, \texttt{TCP}, \texttt{UDP}, \texttt{ICMP}, etc. \\
+Estadísticas de Flujo & 9 & \texttt{Tot sum}, \texttt{Min}, \texttt{Max}, \texttt{AVG}, \texttt{Std}, \texttt{Tot size}, \texttt{IAT}, \texttt{Number}, \texttt{Variance} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection{Pruebas Estadísticas de Selección de Características}
+Para reducir la dimensionalidad y descartar atributos redundantes, se aplicaron tres técnicas estadísticas complementarias:
+
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{Prueba ANOVA F-Test (\textit{Analysis of Variance})}: Mide la razón de varianza entre clases respecto a la varianza dentro de las clases para variables continuas:
+    \begin{equation}
+    F = \frac{\text{Varianza entre grupos}}{\text{Varianza dentro de grupos}} = \frac{\sum_{c=1}^C n_c (\bar{x}_c - \bar{x})^2 / (C - 1)}{\sum_{c=1}^C \sum_{i=1}^{n_c} (x_{c,i} - \bar{x}_c)^2 / (N - C)}
+    \end{equation}
+    \item \textbf{Información Mutua (Mutual Information)}: Mide la dependencia no lineal entre la variable $X_j$ y la etiqueta $Y$:
+    \begin{equation}
+    I(X_j; Y) = \sum_{x \in X_j} \sum_{y \in Y} p(x, y) \log \left( \frac{p(x, y)}{p(x)p(y)} \right)
+    \end{equation}
+    \item \textbf{Importancia de Gini mediante Random Forest}: Mide la reducción total de impureza alcanzada por la variable $X_j$ en las divisiones de los árboles de decisión:
+    \begin{equation}
+    I_{\text{Gini}}(X_j) = \sum_{t \in T} \Delta I(t, X_j)
+    \end{equation}
+\end{enumerate}
+
+Las 15 características con mayores puntuaciones estadísticas fueron seleccionadas y validadas, exportando el reporte en \texttt{results/reports\_and\_plots/feature\_selection\_stats.csv}.
+
+\subsubsection{Escalado Mínimo-Máximo (MinMaxScaler)}
+Para prevenir que variables de gran magnitud (\texttt{Tot sum}, \texttt{Tot size}) dominen los gradientes de la red neuronal, se aplicó la transformación \texttt{MinMaxScaler} acotando los atributos al rango $[0, 1]$:
+\begin{equation}
+x' = \frac{x - x_{\min}}{x_{\max} - x_{\min}}
+\end{equation}
+El escalador fue ajustado exclusivamente con los datos de entrenamiento para evitar fuga de datos (\textit{Data Leakage}).
+
+% ──────────────────────────────────────────────────────────
+% FASE 2
+% ──────────────────────────────────────────────────────────
+\subsection{Fase 2: Diseño y Configuración de la Arquitectura del Ensamble Híbrido}
+
+El sistema \textbf{EdgeGuard-IoT} utiliza una arquitectura en dos niveles de aprendizaje:
+
+\subsubsection{Arquitectura del Modelo Base VAE-MLP (Nivel 0)}
+El modelo VAE-MLP combina compresión probabilística latente con clasificación profunda supervisada. La Figura~\ref{fig:vae_mlp_metodologia} ilustra el flujo de datos interno del modelo:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\linewidth]{../results/reports_and_plots/vae_mlp_architecture_diagram.png}
+\caption{Diagrama de bloques y flujo computacional de la arquitectura VAE-MLP.}
+\label{fig:vae_mlp_metodologia}
+\end{figure}
+
+\begin{itemize}
+    \item \textbf{Encoder VAE}: Tres capas densas ($39 \rightarrow 64 \rightarrow 32$) que proyectan la entrada a los vectores de media $\boldsymbol{\mu} \in \mathbb{R}^{16}$ y log-varianza $\log(\boldsymbol{\sigma}^2) \in \mathbb{R}^{16}$.
+    \item \textbf{Espacio Latente (Bottleneck)}: Muestreo de $16$ dimensiones mediante el truco de reparametrización $\mathbf{z} = \boldsymbol{\mu} + \boldsymbol{\sigma} \odot \boldsymbol{\epsilon}$.
+    \item \textbf{Decoder VAE}: Tres capas densas ($16 \rightarrow 32 \rightarrow 64 \rightarrow 39$) con activación Sigmoide para reconstruir la entrada original ($\hat{\mathbf{x}}$).
+    \item \textbf{Clasificador MLP}: Red conectada directamente a $\mathbf{z}$ formada por capas densas ($16 \rightarrow 32 \rightarrow 16 \rightarrow 8$) con \texttt{BatchNorm1d}, activación \texttt{ReLU} y \texttt{Dropout(0.20)}.
+\end{itemize}
+
+\subsubsection{Modelos Base Basados en Árboles (Nivel 0)}
+Para complementar el espacio latente del VAE-MLP, se entrenaron tres clasificadores de árboles de decisión:
+\begin{enumerate}
+    \item \textbf{Random Forest (RF)}: 100 estimadores, profundidad máxima 15, criterio Gini.
+    \item \textbf{XGBoost (XGB)}: 150 estimadores, profundidad máxima 7, tasa de aprendizaje $\eta = 0.05$, submuestreo $0.80$.
+    \item \textbf{LightGBM (LGBM)}: 150 estimadores, 31 hojas máximas, tasa de aprendizaje $\eta = 0.05$.
+\end{enumerate}
+
+\subsubsection{Meta-Learner de Nivel 1 (Level-1 Meta-Learner)}
+El Meta-Learner es un clasificador LightGBM ($100$ estimadores, profundidad $4$, $\eta = 0.03$) que procesa la concatenación de los vectores de probabilidad emitidos por los 4 modelos de Nivel 0 ($\mathbf{M} \in \mathbb{R}^{N \times 32}$).
+
+% ──────────────────────────────────────────────────────────
+% FASE 3
+% ──────────────────────────────────────────────────────────
+\subsection{Fase 3: Preprocesamiento, Entrenamiento GPU y Cuantificación INT8}
+
+\subsubsection{Estrategia de Entrenamiento en GPU CUDA}
+El entrenamiento del VAE-MLP se ejecutó en una GPU NVIDIA GeForce RTX 5070 Ti Laptop utilizando PyTorch. Se aplicaron los siguientes hiperparámetros:
+\begin{itemize}
+    \item \textbf{Épocas}: 40 épocas completas.
+    \item \textbf{Tamaño de Lote (Batch Size)}: 256 muestras.
+    \item \textbf{Optimizador}: AdamW ($\text{lr} = 2 \times 10^{-3}$, \text{weight\_decay} $= 10^{-4}$).
+    \item \textbf{Scheduler}: \texttt{CosineAnnealingLR} ($T_{\max} = 40$).
+    \item \textbf{Pérdida Ponderada (\texttt{Class-Weighted Loss})}: Pesos calculados inversamente a la frecuencia de clase: $w_c = \frac{N}{C \cdot n_c}$.
+\end{itemize}
+
+\subsubsection{Procedimiento de Cuantificación Dinámica ONNX INT8}
+El modelo PyTorch entrenado se exportó a formato ONNX Float32 (\texttt{opset\_version}=17) utilizando un wrapper de inferencia. Posteriormente, se aplicó cuantificación dinámica a enteros de 8 bits (\texttt{QUInt8}):
+\begin{equation}
+\text{ONNX\_Quantize}(M_{\text{FP32}}) \rightarrow M_{\text{INT8}} \quad (\text{Reducción de } 33.11\text{ KB a } 21.67\text{ KB})
+\end{equation}
+
+% ──────────────────────────────────────────────────────────
+% FASE 4
+% ──────────────────────────────────────────────────────────
+\subsection{Fase 4: Meta-Aprendizaje Stacking y Validación Cruzada 5-Fold}
+
+\subsubsection{Validación Cruzada Estratificada de 5 Pliegues (5-Fold CV)}
+Para garantizar la validez científica y descartar el sobreajuste, la totalidad de los datos se evaluó mediante validación cruzada estratificada de 5 pliegues. En cada pliegue $k \in \{1, \dots, 5\}$, el $80\%$ de los datos se utilizó para ajustar el ensamble y el $20\%$ restante para evaluación.
+
+\subsubsection{Ajuste de Umbrales de Decisión (Threshold Tuning)}
+Se evaluaron umbrales de decisión $T \in \{0.30, 0.40, 0.50, 0.60, 0.70\}$ para la detección binaria de ataques (Ataque vs. Benigno) con el objetivo de maximizar la Sensibilidad (Recall) y reducir a cero los falsos negativos en tráfico crítico.
+
+% ──────────────────────────────────────────────────────────
+% FASE 5
+% ──────────────────────────────────────────────────────────
+\subsection{Fase 5: Evaluación Comparativa Estado del Arte y Explicabilidad SHAP}
+
+\subsubsection{Métricas de Evaluación Global}
+Se evaluaron seis métricas cuantitativas sobre el test set independiente ($27,949$ muestras):
+\begin{equation}
+\text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}
+\end{equation}
+\begin{equation}
+\text{Precision}_{\text{Macro}} = \frac{1}{C} \sum_{c=1}^C \frac{TP_c}{TP_c + FP_c}
+\end{equation}
+\begin{equation}
+\text{Recall}_{\text{Macro}} = \frac{1}{C} \sum_{c=1}^C \frac{TP_c}{TP_c + FN_c}
+\end{equation}
+\begin{equation}
+\text{F1-Score}_{\text{Macro}} = \frac{1}{C} \sum_{c=1}^C 2 \cdot \frac{\text{Precision}_c \cdot \text{Recall}_c}{\text{Precision}_c + \text{Recall}_c}
+\end{equation}
+
+\subsubsection{Explicabilidad Mediante Valores SHAP}
+Se utilizó la librería \texttt{shap.KernelExplainer} para calcular la importancia atribuida a cada una de las 39 características de red, identificando los atributos de mayor impacto marginal en la clasificación.

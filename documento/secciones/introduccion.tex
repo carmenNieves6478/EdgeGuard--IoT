@@ -1,0 +1,7 @@
+\section{INTRODUCCIÓN}
+
+La proliferación masiva de dispositivos de la Internet de las Cosas (IoT) ha transformado la infraestructura digital global. Sin embargo, su limitada capacidad de procesamiento, almacenamiento y memoria los convierte en objetivos primarios para ciberataques impulsados por botnets multiclase como Mirai, DDoS, Reconocimiento, Spoofing, Fuerza Bruta y amenazas basadas en Web.
+
+Los Sistemas de Detección de Intrusos (IDS) tradicionales basados en la nube presentan latencias elevadas incompatibles con la respuesta en tiempo real requerida en redes industriales e infraestructura crítica. Por otro lado, la implementación de redes neuronales profundas (CNN, LSTM) directamente en microcontroladores periféricos se ve severamente limitada por el consumo de memoria RAM y almacenamiento.
+
+Para superar esta limitación, el presente proyecto desarrolla **EdgeGuard-IoT**, una arquitectura híbrida adaptativa. En el borde de la red (dispositivos IoT Edge), desplegamos un modelo de red neuronal liviano basado en Autoencoders Variacionales cuantizados a enteros de 8 bits (\textbf{VAE-MLP INT8}), capaz de operar en microsegundos con un footprint de apenas $21.67\text{ KB}$. En la capa de pasarela en la nube, el sistema conmuta a un ensamble meta-aprendiz (\textbf{Stacking Ensemble}) combinando VAE-MLP, Random Forest, XGBoost y LightGBM para maximizar la exactitud de clasificación a $77.18\%$. Adicionalmente, se integra explicabilidad local mediante SHAP XAI para brindar interpretabilidad forense a los analistas de ciberseguridad.

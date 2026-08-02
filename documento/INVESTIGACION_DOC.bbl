@@ -1,0 +1,292 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{apa/apasortcite//global/global/global}
+    \entry{kingma2013auto}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=b6fbd171848aad4edf3925543f1f1522}{%
+           family={Kingma},
+           familyi={K\bibinitperiod},
+           given={Diederik\bibnamedelima P},
+           giveni={D\bibinitperiod\bibinitdelim P\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=53d2880ad8047b61cdae2c6b2803e763}{%
+           family={Welling},
+           familyi={W\bibinitperiod},
+           given={Max},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{aabdd5db7a1ed298b1dfb6824d032c66}
+      \strng{fullhash}{aabdd5db7a1ed298b1dfb6824d032c66}
+      \strng{fullhashraw}{aabdd5db7a1ed298b1dfb6824d032c66}
+      \strng{bibnamehash}{aabdd5db7a1ed298b1dfb6824d032c66}
+      \strng{authorbibnamehash}{aabdd5db7a1ed298b1dfb6824d032c66}
+      \strng{authornamehash}{aabdd5db7a1ed298b1dfb6824d032c66}
+      \strng{authorfullhash}{aabdd5db7a1ed298b1dfb6824d032c66}
+      \strng{authorfullhashraw}{aabdd5db7a1ed298b1dfb6824d032c66}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:1312.6114}
+      \field{title}{Auto-encoding variational bayes}
+      \field{year}{2013}
+    \endentry
+    \entry{lundberg2017unified}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=2a1075150e1e1dad8127b019f7ca9031}{%
+           family={Lundberg},
+           familyi={L\bibinitperiod},
+           given={Scott\bibnamedelima M},
+           giveni={S\bibinitperiod\bibinitdelim M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=ee964079d93879aaef2382a5fff343d3}{%
+           family={Lee},
+           familyi={L\bibinitperiod},
+           given={Su-In},
+           giveni={S\bibinithyphendelim I\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{9cd6e49767b1dfa9f5df9a46216a8739}
+      \strng{fullhash}{9cd6e49767b1dfa9f5df9a46216a8739}
+      \strng{fullhashraw}{9cd6e49767b1dfa9f5df9a46216a8739}
+      \strng{bibnamehash}{9cd6e49767b1dfa9f5df9a46216a8739}
+      \strng{authorbibnamehash}{9cd6e49767b1dfa9f5df9a46216a8739}
+      \strng{authornamehash}{9cd6e49767b1dfa9f5df9a46216a8739}
+      \strng{authorfullhash}{9cd6e49767b1dfa9f5df9a46216a8739}
+      \strng{authorfullhashraw}{9cd6e49767b1dfa9f5df9a46216a8739}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Advances in Neural Information Processing Systems}
+      \field{title}{A unified approach to interpreting model predictions}
+      \field{volume}{30}
+      \field{year}{2017}
+    \endentry
+    \entry{ciciot2023}{article}{}{}
+      \name{author}{6}{}{%
+        {{un=0,uniquepart=base,hash=0aa5769162a80e8780d436170633ec5b}{%
+           family={Neto},
+           familyi={N\bibinitperiod},
+           given={E.\bibnamedelimi C.\bibnamedelimi P.},
+           giveni={E\bibinitperiod\bibinitdelim C\bibinitperiod\bibinitdelim P\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=6e5f01c77e8ab8cd3c0550c93e2b1d65}{%
+           family={dadkhah},
+           familyi={d\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=b45dcbda0b262848325213a99adee912}{%
+           family={Ferreira},
+           familyi={F\bibinitperiod},
+           given={R.},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=5f76b7b78f45c9a887336f7bb3dae7aa}{%
+           family={Zohourian},
+           familyi={Z\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=0e91d0af9acc03103b78d4adfbbe76a9}{%
+           family={Lu},
+           familyi={L\bibinitperiod},
+           given={R.},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c15f7fdf79408185339d4551e562b81f}{%
+           family={Ghorbani},
+           familyi={G\bibinitperiod},
+           given={A.\bibnamedelimi A.},
+           giveni={A\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{8315d55b46b91725a38e25411f1110b1}
+      \strng{fullhash}{1591cf69b6ac5e7ec76b3de85871562d}
+      \strng{fullhashraw}{1591cf69b6ac5e7ec76b3de85871562d}
+      \strng{bibnamehash}{1591cf69b6ac5e7ec76b3de85871562d}
+      \strng{authorbibnamehash}{1591cf69b6ac5e7ec76b3de85871562d}
+      \strng{authornamehash}{8315d55b46b91725a38e25411f1110b1}
+      \strng{authorfullhash}{1591cf69b6ac5e7ec76b3de85871562d}
+      \strng{authorfullhashraw}{1591cf69b6ac5e7ec76b3de85871562d}
+      \field{sortinit}{N}
+      \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Transactions on Information Forensics and Security}
+      \field{title}{CIC-IoT-2023: A Real-Time Dataset for Profiling and Detecting Attacks in IoT Networks}
+      \field{volume}{18}
+      \field{year}{2023}
+      \field{pages}{4520\bibrangedash 4534}
+      \range{pages}{15}
+    \endentry
+  \enddatalist
+  \datalist[entry]{apa/global//global/global/global}
+    \entry{kingma2013auto}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=b6fbd171848aad4edf3925543f1f1522}{%
+           family={Kingma},
+           familyi={K\bibinitperiod},
+           given={Diederik\bibnamedelima P},
+           giveni={D\bibinitperiod\bibinitdelim P\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=53d2880ad8047b61cdae2c6b2803e763}{%
+           family={Welling},
+           familyi={W\bibinitperiod},
+           given={Max},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{aabdd5db7a1ed298b1dfb6824d032c66}
+      \strng{fullhash}{aabdd5db7a1ed298b1dfb6824d032c66}
+      \strng{fullhashraw}{aabdd5db7a1ed298b1dfb6824d032c66}
+      \strng{bibnamehash}{aabdd5db7a1ed298b1dfb6824d032c66}
+      \strng{authorbibnamehash}{aabdd5db7a1ed298b1dfb6824d032c66}
+      \strng{authornamehash}{aabdd5db7a1ed298b1dfb6824d032c66}
+      \strng{authorfullhash}{aabdd5db7a1ed298b1dfb6824d032c66}
+      \strng{authorfullhashraw}{aabdd5db7a1ed298b1dfb6824d032c66}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:1312.6114}
+      \field{title}{Auto-encoding variational bayes}
+      \field{year}{2013}
+    \endentry
+    \entry{lundberg2017unified}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=2a1075150e1e1dad8127b019f7ca9031}{%
+           family={Lundberg},
+           familyi={L\bibinitperiod},
+           given={Scott\bibnamedelima M},
+           giveni={S\bibinitperiod\bibinitdelim M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=ee964079d93879aaef2382a5fff343d3}{%
+           family={Lee},
+           familyi={L\bibinitperiod},
+           given={Su-In},
+           giveni={S\bibinithyphendelim I\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{9cd6e49767b1dfa9f5df9a46216a8739}
+      \strng{fullhash}{9cd6e49767b1dfa9f5df9a46216a8739}
+      \strng{fullhashraw}{9cd6e49767b1dfa9f5df9a46216a8739}
+      \strng{bibnamehash}{9cd6e49767b1dfa9f5df9a46216a8739}
+      \strng{authorbibnamehash}{9cd6e49767b1dfa9f5df9a46216a8739}
+      \strng{authornamehash}{9cd6e49767b1dfa9f5df9a46216a8739}
+      \strng{authorfullhash}{9cd6e49767b1dfa9f5df9a46216a8739}
+      \strng{authorfullhashraw}{9cd6e49767b1dfa9f5df9a46216a8739}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Advances in Neural Information Processing Systems}
+      \field{title}{A unified approach to interpreting model predictions}
+      \field{volume}{30}
+      \field{year}{2017}
+    \endentry
+    \entry{ciciot2023}{article}{}{}
+      \name{author}{6}{}{%
+        {{un=0,uniquepart=base,hash=0aa5769162a80e8780d436170633ec5b}{%
+           family={Neto},
+           familyi={N\bibinitperiod},
+           given={E.\bibnamedelimi C.\bibnamedelimi P.},
+           giveni={E\bibinitperiod\bibinitdelim C\bibinitperiod\bibinitdelim P\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=6e5f01c77e8ab8cd3c0550c93e2b1d65}{%
+           family={dadkhah},
+           familyi={d\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=b45dcbda0b262848325213a99adee912}{%
+           family={Ferreira},
+           familyi={F\bibinitperiod},
+           given={R.},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=5f76b7b78f45c9a887336f7bb3dae7aa}{%
+           family={Zohourian},
+           familyi={Z\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=0e91d0af9acc03103b78d4adfbbe76a9}{%
+           family={Lu},
+           familyi={L\bibinitperiod},
+           given={R.},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c15f7fdf79408185339d4551e562b81f}{%
+           family={Ghorbani},
+           familyi={G\bibinitperiod},
+           given={A.\bibnamedelimi A.},
+           giveni={A\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{8315d55b46b91725a38e25411f1110b1}
+      \strng{fullhash}{1591cf69b6ac5e7ec76b3de85871562d}
+      \strng{fullhashraw}{1591cf69b6ac5e7ec76b3de85871562d}
+      \strng{bibnamehash}{1591cf69b6ac5e7ec76b3de85871562d}
+      \strng{authorbibnamehash}{1591cf69b6ac5e7ec76b3de85871562d}
+      \strng{authornamehash}{8315d55b46b91725a38e25411f1110b1}
+      \strng{authorfullhash}{1591cf69b6ac5e7ec76b3de85871562d}
+      \strng{authorfullhashraw}{1591cf69b6ac5e7ec76b3de85871562d}
+      \field{sortinit}{N}
+      \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Transactions on Information Forensics and Security}
+      \field{title}{CIC-IoT-2023: A Real-Time Dataset for Profiling and Detecting Attacks in IoT Networks}
+      \field{volume}{18}
+      \field{year}{2023}
+      \field{pages}{4520\bibrangedash 4534}
+      \range{pages}{15}
+    \endentry
+  \enddatalist
+  \missing{albulayhi2022}
+  \missing{hassan2025}
+  \missing{kumar2023}
+  \missing{neto2023}
+  \missing{zhang2024}
+\endrefsection
+\endinput
+
