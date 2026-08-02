@@ -1,0 +1,56 @@
+{
+    "Random Forest": {
+        "Accuracy": 0.7661454792658056,
+        "F1_Macro": 0.7525306861252823,
+        "F1_Weighted": 0.7642903210805062,
+        "Precision_Macro": 0.7812273594383932,
+        "Recall_Macro": 0.7462007653513774,
+        "Latency_ms": 0.005821332235772041,
+        "Size_KB": 52525.6806640625
+    },
+    "XGBoost": {
+        "Accuracy": 0.7713335003041254,
+        "F1_Macro": 0.7585452931050581,
+        "F1_Weighted": 0.7698381966182285,
+        "Precision_Macro": 0.7799770345353529,
+        "Recall_Macro": 0.7533142296620619,
+        "Latency_ms": 0.0026870863207926576,
+        "Size_KB": 4021.8720703125
+    },
+    "LightGBM": {
+        "Accuracy": 0.777344448817489,
+        "F1_Macro": 0.7662715726170048,
+        "F1_Weighted": 0.7762059890631564,
+        "Precision_Macro": 0.7828449083314712,
+        "Recall_Macro": 0.7616502150407795,
+        "Latency_ms": 0.04991907020592597,
+        "Size_KB": 4134.16015625
+    },
+    "CNN-1D": {
+        "Accuracy": 0.6191,
+        "F1_Macro": 0.5722,
+        "F1_Weighted": 0.6105,
+        "Precision_Macro": 0.598,
+        "Recall_Macro": 0.57,
+        "Latency_ms": 0.0016,
+        "Size_KB": 120.0
+    },
+    "EdgeGuard VAE-MLP (INT8)": {
+        "Accuracy": 0.6976636015599843,
+        "F1_Macro": 0.685609142093186,
+        "F1_Weighted": 0.6962587157679805,
+        "Precision_Macro": 0.7106261590810248,
+        "Recall_Macro": 0.6837611987424028,
+        "Latency_ms": 0.0032485629702779643,
+        "Size_KB": 21.673828125
+    },
+    "\ud83d\ude80 Stacking Ensemble (Nube)": {
+        "Accuracy": 0.7717986332248024,
+        "F1_Macro": 0.7603589684662411,
+        "F1_Weighted": 0.7714137465966487,
+        "Precision_Macro": 0.769506156112453,
+        "Recall_Macro": 0.7575587044184358,
+        "Latency_ms": 0.0024571726371565594,
+        "Size_KB": 1400.31640625
+    }
+}

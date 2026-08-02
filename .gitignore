@@ -1,0 +1,24 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Data files (Exclude heavy raw CSVs)
+*.csv
+!results/reports_and_plots/*.csv
+*.parquet
+
+# Virtual Environments
+venv/
+env/
+ENV/
+.env
+
+# Antigravity & IDE
+.vscode/
+.idea/
+.ipynb_checkpoints/
+
+# System files
+.DS_Store
+Thumbs.db

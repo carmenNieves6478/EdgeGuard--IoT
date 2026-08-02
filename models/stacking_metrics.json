@@ -1,0 +1,10 @@
+{
+    "accuracy": 0.7643922859494079,
+    "f1_macro": 0.7533185601874759,
+    "f1_weighted": 0.7640187744262099,
+    "components": [
+        "VAE-MLP INT8",
+        "Random Forest",
+        "XGBoost"
+    ]
+}

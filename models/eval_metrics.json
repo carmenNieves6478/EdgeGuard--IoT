@@ -1,0 +1,16 @@
+{
+    "macro_f1": 0.6979566095840082,
+    "weighted_f1": 0.7084493031034831,
+    "macro_recall": 0.6914064458566822,
+    "macro_precision": 0.7205312441514822,
+    "classes": [
+        "Benign",
+        "Brute Force",
+        "DDoS",
+        "DoS",
+        "Mirai",
+        "Recon",
+        "Spoofing",
+        "Web-based"
+    ]
+}

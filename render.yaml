@@ -1,0 +1,27 @@
+services:
+  # Service 1: FastAPI Backend API
+  - type: web
+    name: edgeguard-backend
+    env: docker
+    dockerfilePath: Dockerfile
+    plan: free
+    region: oregon
+    envVars:
+      - key: PORT
+        value: 8000
+
+  # Service 2: Streamlit Dashboard Frontend
+  - type: web
+    name: edgeguard-frontend
+    env: docker
+    dockerfilePath: Dockerfile.frontend
+    plan: free
+    region: oregon
+    envVars:
+      - key: PORT
+        value: 8501
+      - key: API_URL
+        fromService:
+          type: web
+          name: edgeguard-backend
+          property: host
