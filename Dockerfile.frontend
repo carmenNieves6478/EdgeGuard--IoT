@@ -21,6 +21,8 @@ ENV PATH=/root/.local/bin:$PATH
 COPY dashboard/ ./dashboard/
 
 ENV PORT=8501
+ENV STREAMLIT_SERVER_FILE_WATCHER_TYPE=none
+ENV STREAMLIT_SERVER_HEADLESS=true
 EXPOSE 8501
 
-CMD ["sh", "-c", "streamlit run dashboard/app.py --server.port ${PORT:-8501} --server.address 0.0.0.0 --server.headless true --server.enableCORS false --server.enableXsrfProtection false"]
+CMD ["sh", "-c", "streamlit run dashboard/app.py --server.port ${PORT:-8501} --server.address 0.0.0.0 --server.headless true --server.enableCORS false --server.enableXsrfProtection false --server.fileWatcherType none"]
