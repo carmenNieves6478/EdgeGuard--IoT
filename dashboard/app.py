@@ -171,7 +171,13 @@ st.markdown("""
 # SIDEBAR NAVIGATION & ENGINE CONFIGURATION
 # ------------------------------------------------------------------------------
 st.sidebar.markdown('<div style="font-size: 1.1rem; font-weight: 900; letter-spacing: 2px; color: #00F2FE; margin-bottom: 12px;">EDGEGUARD SYSTEM</div>', unsafe_allow_html=True)
-api_url = st.sidebar.text_input("Backend API Endpoint", os.getenv("API_URL", "http://localhost:8000"))
+raw_api = os.getenv("API_URL", "http://localhost:8000")
+if not raw_api.startswith("http://") and not raw_api.startswith("https://"):
+    default_api_url = f"https://{raw_api}"
+else:
+    default_api_url = raw_api
+
+api_url = st.sidebar.text_input("Backend API Endpoint", default_api_url)
 
 model_choice = st.sidebar.radio(
     "Inference Engine Mode",
