@@ -122,6 +122,11 @@ streamlit run dashboard/app.py
 python simulator.py
 ```
 
+### 5. Lanzar la Presentación Interactiva de Investigación
+```bash
+streamlit run presentation_app.py
+```
+
 ---
 
 ## 👤 AUTORA Y AFILIACIÓN ACADÉMICA
