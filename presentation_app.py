@@ -99,7 +99,7 @@ st.markdown("""
         box-shadow: 0 0 12px rgba(0, 242, 254, 0.5);
     }
 </style>
-""", unsafe_allow_scheme_impact=True)
+""", unsafe_allow_html=True)
 
 # Helper functions to load artifacts
 @st.cache_data
@@ -199,7 +199,7 @@ if current_slide == 1:
             Evaluado sobre el Benchmark de Ciberseguridad <b>CIC-IoT-2023</b> (186,321 Muestras Balanceadas)
         </p>
     </div>
-    """, unsafe_allow_scheme_impact=True)
+    """, unsafe_allow_html=True)
     
     col1, col2, col3, col4 = st.columns(4)
     with col1:
@@ -209,7 +209,7 @@ if current_slide == 1:
             <h2 style="color: #00f2fe; margin: 10px 0;">77.18%</h2>
             <p style="color: #94a3b8; font-size: 0.9rem;">Stacking Ensemble LightGBM</p>
         </div>
-        """, unsafe_allow_scheme_impact=True)
+        """, unsafe_allow_html=True)
     with col2:
         st.markdown("""
         <div class="glass-card" style="text-align: center;">
@@ -217,7 +217,7 @@ if current_slide == 1:
             <h2 style="color: #00f2fe; margin: 10px 0;">21.67 KB</h2>
             <p style="color: #94a3b8; font-size: 0.9rem;">Modelo ONNX INT8 Cuantizado</p>
         </div>
-        """, unsafe_allow_scheme_impact=True)
+        """, unsafe_allow_html=True)
     with col3:
         st.markdown("""
         <div class="glass-card" style="text-align: center;">
@@ -225,7 +225,7 @@ if current_slide == 1:
             <h2 style="color: #00f2fe; margin: 10px 0;">3.25 μs</h2>
             <p style="color: #94a3b8; font-size: 0.9rem;">Microsegundos por Muestra</p>
         </div>
-        """, unsafe_allow_scheme_impact=True)
+        """, unsafe_allow_html=True)
     with col4:
         st.markdown("""
         <div class="glass-card" style="text-align: center;">
@@ -233,7 +233,7 @@ if current_slide == 1:
             <h2 style="color: #d4af37; margin: 10px 0;">SHAP XAI</h2>
             <p style="color: #94a3b8; font-size: 0.9rem;">Atribución Forense Local</p>
         </div>
-        """, unsafe_allow_scheme_impact=True)
+        """, unsafe_allow_html=True)
         
     st.markdown("""
     <div class="glass-card" style="margin-top: 20px;">
@@ -248,13 +248,13 @@ if current_slide == 1:
             </tr>
         </table>
     </div>
-    """, unsafe_allow_scheme_impact=True)
+    """, unsafe_allow_html=True)
 
 # ==============================================================================
 # SLIDE 2: EL PROBLEMA
 # ==============================================================================
 elif current_slide == 2:
-    st.markdown("<h2 class='neon-title'>🚨 El Problema & Trilema de Ciberseguridad IoT</h2>", unsafe_allow_scheme_impact=True)
+    st.markdown("<h2 class='neon-title'>🚨 El Problema & Trilema de Ciberseguridad IoT</h2>", unsafe_allow_html=True)
     st.write("La proliferación masiva de dispositivos periféricos IoT expone a las redes industriales y urbanas a ciberataques botnet altamente automatizados.")
     
     col1, col2, col3 = st.columns(3)
@@ -266,7 +266,7 @@ elif current_slide == 2:
                 Los IDS tradicionales basados centralizadamente en servidores nube requieren transmitir flujos masivos de paquetes de red, generando latencias inaceptables para la mitigación inmediata de ataques de rápida propagación.
             </p>
         </div>
-        """, unsafe_allow_scheme_impact=True)
+        """, unsafe_allow_html=True)
     with col2:
         st.markdown("""
         <div class="glass-card">
@@ -275,7 +275,7 @@ elif current_slide == 2:
                 Los microcontroladores empotrados (ARM Cortex-M, ESP32) poseen memorias RAM de pocos kilobytes ($256\text{ KB} - 512\text{ MB}$). Los clasificadores tradicionales de árboles (Random Forest $>50\text{ MB}$) no pueden ser flasheados en el borde.
             </p>
         </div>
-        """, unsafe_allow_scheme_impact=True)
+        """, unsafe_allow_html=True)
     with col3:
         st.markdown("""
         <div class="glass-card">
@@ -284,7 +284,7 @@ elif current_slide == 2:
                 Los modelos de aprendizaje profundo pesados operan como "cajas negras", impidiendo que los analistas en Centros de Operaciones de Ciberseguridad (SOC) justifiquen por qué un paquete fue clasificado como ataque.
             </p>
         </div>
-        """, unsafe_allow_scheme_impact=True)
+        """, unsafe_allow_html=True)
 
     # Plotly Threat Breakdown Chart
     df_threats = pd.DataFrame({
@@ -308,7 +308,7 @@ elif current_slide == 2:
 # SLIDE 3: ARQUITECTURA DEL SISTEMA
 # ==============================================================================
 elif current_slide == 3:
-    st.markdown("<h2 class='neon-title'>🏗️ Arquitectura Híbrida Adaptativa (Edge-Cloud)</h2>", unsafe_allow_scheme_impact=True)
+    st.markdown("<h2 class='neon-title'>🏗️ Arquitectura Híbrida Adaptativa (Edge-Cloud)</h2>", unsafe_allow_html=True)
     st.write("EdgeGuard-IoT coordina la inferencia en dos capas computacionales para balancear velocidad en el borde y máxima precisión en la nube.")
 
     col1, col2 = st.columns(2)
@@ -324,7 +324,7 @@ elif current_slide == 3:
                 <li><b>Accuracy Autónomo:</b> 69.73%</li>
             </ul>
         </div>
-        """, unsafe_allow_scheme_impact=True)
+        """, unsafe_allow_html=True)
     with col2:
         st.markdown("""
         <div class="glass-card">
@@ -337,7 +337,7 @@ elif current_slide == 3:
                 <li><b>Explicabilidad:</b> Atribuciones SHAP XAI para analistas SOC</li>
             </ul>
         </div>
-        """, unsafe_allow_scheme_impact=True)
+        """, unsafe_allow_html=True)
 
     # Sankey diagram of hybrid flow
     fig_sankey = go.Figure(data=[go.Sankey(
@@ -360,7 +360,7 @@ elif current_slide == 3:
 # SLIDE 4: BENCHMARK Y ESTADO DEL ARTE
 # ==============================================================================
 elif current_slide == 4:
-    st.markdown("<h2 class='neon-title'>📊 Benchmark Estado del Arte</h2>", unsafe_allow_scheme_impact=True)
+    st.markdown("<h2 class='neon-title'>📊 Benchmark Estado del Arte</h2>", unsafe_allow_html=True)
     st.write("Evaluación comparativa sobre 27,949 muestras de prueba independientes frente a 6 clasificadores del estado del arte.")
 
     benchmark_data = load_benchmark_data()
@@ -417,7 +417,7 @@ elif current_slide == 4:
 # SLIDE 5: MATRIZ DE CONFUSIÓN Y MULTICLASE
 # ==============================================================================
 elif current_slide == 5:
-    st.markdown("<h2 class='neon-title'>📈 Evaluación Multiclase & Matriz de Confusión</h2>", unsafe_allow_scheme_impact=True)
+    st.markdown("<h2 class='neon-title'>📈 Evaluación Multiclase & Matriz de Confusión</h2>", unsafe_allow_html=True)
     st.write("Análisis detallado de la matriz de confusión normalizada (%) sobre el test set (27,949 muestras).")
 
     categories = ["Benign", "Brute Force", "DDoS", "DoS", "Mirai", "Recon", "Spoofing", "Web-based"]
@@ -458,13 +458,13 @@ elif current_slide == 5:
                 <li><b>Web-Based y Brute Force:</b> Presentan mayor tasa de confusión con tráfico benigno debido a tasas de transmisión bajas similares al comportamiento humano.</li>
             </ul>
         </div>
-        """, unsafe_allow_scheme_impact=True)
+        """, unsafe_allow_html=True)
 
 # ==============================================================================
 # SLIDE 6: INTERPRETABILIDAD SHAP XAI
 # ==============================================================================
 elif current_slide == 6:
-    st.markdown("<h2 class='neon-title'>🔬 Interpretabilidad Forense con SHAP XAI</h2>", unsafe_allow_scheme_impact=True)
+    st.markdown("<h2 class='neon-title'>🔬 Interpretabilidad Forense con SHAP XAI</h2>", unsafe_allow_html=True)
     st.write("Explicabilidad axiomática local que quantify el impacto marginal de las 39 características predictivas en cada veredicto de seguridad.")
 
     # Top features from SHAP analysis
@@ -490,7 +490,7 @@ elif current_slide == 6:
 # SLIDE 7: SIMULADOR DE INFERENCIA EN TIEMPO REAL
 # ==============================================================================
 elif current_slide == 7:
-    st.markdown("<h2 class='neon-title'>⚡ Demostración de Inferencia en Tiempo Real (Live)</h2>", unsafe_allow_scheme_impact=True)
+    st.markdown("<h2 class='neon-title'>⚡ Demostración de Inferencia en Tiempo Real (Live)</h2>", unsafe_allow_html=True)
     st.write("Prueba interactiva del motor de inferencia en tiempo real ejecutando el modelo **ONNX INT8** cuantizado.")
 
     artifacts = load_ml_artifacts()
@@ -518,7 +518,7 @@ elif current_slide == 7:
         syn_val = st.slider("SYN Count", 0, 200, int(syn_cnt))
 
     with col_sim:
-        st.markdown("<div class='glass-card'>", unsafe_allow_scheme_impact=True)
+        st.markdown("<div class='glass-card'>", unsafe_allow_html=True)
         st.markdown("### 🔍 Panel de Ejecución Inmediata")
         
         if st.button("⚡ Ejecutar Inferencia Híbrida (Edge & Cloud)", use_container_width=True):
@@ -558,20 +558,20 @@ elif current_slide == 7:
                 <h4 style="color: #e2e8f0; margin: 5px 0;">Confianza de la Predicción: {conf*100:.1f}%</h4>
                 <p style="color: #00f2fe; margin: 0;">⚡ Latencia Registrada en el Borde: <b>{elapsed_us:.2f} μs</b> | Footprint ONNX: <b>21.67 KB</b></p>
             </div>
-            """, unsafe_allow_scheme_impact=True)
+            """, unsafe_allow_html=True)
             
             st.markdown("#### 🔬 Explicabilidad Local SHAP XAI en Tiempo Real (Top-3 Factores):")
             st.write(f"1. **Rate ({rate_val:.1f} pkts/s)** $\rightarrow$ Impacto Marginal: **+0.342** hacia {verdict}")
             st.write(f"2. **Header_Length ({header_val:.0f})** $\rightarrow$ Impacto Marginal: **+0.215**")
             st.write(f"3. **syn_count ({syn_val})** $\rightarrow$ Impacto Marginal: **+0.184**")
             
-        st.markdown("</div>", unsafe_allow_scheme_impact=True)
+        st.markdown("</div>", unsafe_allow_html=True)
 
 # ==============================================================================
 # SLIDE 8: CONCLUSIONES & DESPLIEGUE
 # ==============================================================================
 elif current_slide == 8:
-    st.markdown("<h2 class='neon-title'>🏁 Conclusiones, Despliegue & Repositorio</h2>", unsafe_allow_scheme_impact=True)
+    st.markdown("<h2 class='neon-title'>🏁 Conclusiones, Despliegue & Repositorio</h2>", unsafe_allow_html=True)
     
     col1, col2 = st.columns(2)
     with col1:
@@ -584,7 +584,7 @@ elif current_slide == 8:
                 <li><b>Transparencia SOC:</b> La integración de SHAP XAI resolvió la opacidad algorítmica, permitiendo auditorías forenses en tiempo real.</li>
             </ol>
         </div>
-        """, unsafe_allow_scheme_impact=True)
+        """, unsafe_allow_html=True)
 
     with col2:
         st.markdown("""
@@ -597,11 +597,11 @@ elif current_slide == 8:
                 <li>💻 <b>Repositorio Oficial GitHub:</b> <a href="https://github.com/carmenNieves6478/EdgeGuard--IoT.git" target="_blank" style="color:#d4af37;">EdgeGuard--IoT.git</a></li>
             </ul>
         </div>
-        """, unsafe_allow_scheme_impact=True)
+        """, unsafe_allow_html=True)
 
     st.markdown("""
     <div style="text-align: center; margin-top: 30px; padding: 20px;" class="glass-card">
         <h2 style="color: #d4af37; margin: 0;">¡Muchas Gracias por su Atención!</h2>
         <p style="color: #94a3b8; margin-top: 5px;">¿Preguntas o comentarios sobre el proyecto EdgeGuard-IoT?</p>
     </div>
-    """, unsafe_allow_scheme_impact=True)
+    """, unsafe_allow_html=True)
