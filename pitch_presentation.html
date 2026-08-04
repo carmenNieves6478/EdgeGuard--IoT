@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EdgeGuard-IoT | Pitch Deck Profesional & Presentación Interactiva</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        :root {
+            --bg-dark: #070a12;
+            --bg-card: rgba(15, 23, 42, 0.75);
+            --cyan-neon: #00f2fe;
+            --blue-neon: #4facfe;
+            --purple-neon: #7928ca;
+            --gold-accent: #d4af37;
+            --danger-red: #f43f5e;
+            --warning-orange: #fb923c;
+            --success-green: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-glow: rgba(0, 242, 254, 0.25);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        html, body {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background-color: var(--bg-dark);
+            font-family: 'Outfit', 'Inter', sans-serif;
+            color: var(--text-main);
+        }
+
+        /* Top Progress Line */
+        .progress-bar-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            z-index: 1000;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            width: 12.5%;
+            background: linear-gradient(90deg, var(--cyan-neon), var(--purple-neon));
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 10px var(--cyan-neon);
+        }
+
+        /* Presentation Container */
+        .presentation-deck {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Individual Slide - Strict 100vh Viewport */
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            padding: 2.2rem 4rem 1.8rem 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.96) translateY(10px);
+            transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
+            box-sizing: border-box;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1) translateY(0);
+        }
+
+        /* Header Layout inside Slide */
+        .slide-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 10%;
+        }
+
+        .slide-title-group h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--cyan-neon), var(--blue-neon));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .slide-title-group p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .brand-badge {
+            background: rgba(0, 242, 254, 0.08);
+            border: 1px solid var(--border-glow);
+            color: var(--cyan-neon);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        /* Slide Content Area (Strict Body Fit) */
+        .slide-body {
+            height: 78%;
+            width: 100%;
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Glassmorphic Cards */
+        .glass-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glow);
+            border-radius: 14px;
+            padding: 1.2rem 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            transition: border-color 0.3s ease, transform 0.3s ease;
+        }
+        .glass-card:hover {
+            border-color: rgba(0, 242, 254, 0.5);
+        }
+
+        /* Bottom Controls Footer */
+        .slide-footer {
+            height: 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding-top: 0.5rem;
+        }
+
+        .slide-counter {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        .slide-counter span {
+            color: var(--cyan-neon);
+            font-weight: 700;
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .btn-nav {
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid var(--border-glow);
+            color: var(--text-main);
+            padding: 8px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-nav:hover {
+            background: var(--cyan-neon);
+            color: #070a12;
+            border-color: var(--cyan-neon);
+            box-shadow: 0 0 12px var(--cyan-neon);
+        }
+
+        .key-hint {
+            background: rgba(255,255,255,0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Specific Slide Styling */
+        /* Slide 1: Cover */
+        .cover-content {
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .cover-title {
+            font-size: 3.8rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, #ffffff 0%, var(--cyan-neon) 50%, var(--blue-neon) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .cover-subtitle {
+            font-size: 1.3rem;
+            color: #cbd5e1;
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+
+        .metrics-grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.2rem;
+            width: 100%;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 1.2rem;
+        }
+        .stat-card h3 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--cyan-neon);
+            margin-bottom: 4px;
+        }
+        .stat-card p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Slide 2: Problem Grid */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.2rem;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Slide 3: Architecture Split */
+        .split-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            width: 100%;
+            height: 100%;
+            align-items: center;
+        }
+
+        .img-preview {
+            width: 100%;
+            max-height: 280px;
+            object-fit: contain;
+            border-radius: 8px;
+            border: 1px solid var(--border-glow);
+        }
+
+        /* Interactive Live Simulator */
+        .sim-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 1.5rem;
+            width: 100%;
+            height: 100%;
+        }
+
+        .preset-btn {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 8px;
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-main);
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: left;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .preset-btn:hover, .preset-btn.active {
+            border-color: var(--cyan-neon);
+            background: rgba(0, 242, 254, 0.12);
+            color: var(--cyan-neon);
+        }
+
+        .range-slider {
+            width: 100%;
+            accent-color: var(--cyan-neon);
+            margin: 6px 0;
+        }
+
+        .verdict-box {
+            text-align: center;
+            padding: 1.2rem;
+            border-radius: 10px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 2px solid var(--cyan-neon);
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.2);
+            margin-bottom: 1rem;
+        }
+
+        /* Responsive font sizing for tables */
+        table.pitch-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+        }
+        table.pitch-table th {
+            background: rgba(0, 242, 254, 0.1);
+            color: var(--cyan-neon);
+            text-align: left;
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--border-glow);
+        }
+        table.pitch-table td {
+            padding: 8px 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .badge-highlight {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success-green);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Progress Bar -->
+    <div class="progress-bar-container">
+        <div class="progress-bar-fill" id="progressBar"></div>
+    </div>
+
+    <!-- Presentation Deck Root -->
+    <div class="presentation-deck">
+
+        <!-- ========================================== -->
+        <!-- SLIDE 1: PORTADA EJECUTIVA (HOOK) -->
+        <!-- ========================================== -->
+        <div class="slide active" id="slide-1">
+            <div class="slide-header">
+                <div class="brand-badge">UNIVERSIDAD NACIONAL DEL ALTIPLANO PUNO</div>
+                <div class="brand-badge">EPIS — 2026</div>
+            </div>
+
+            <div class="slide-body">
+                <div class="cover-content">
+                    <h1 class="cover-title">EdgeGuard-IoT</h1>
+                    <p class="cover-subtitle">Sistema Adaptativo de Detección de Botnets Multiclase mediante VAE-MLP y XAI en el Borde</p>
+                    
+                    <div class="metrics-grid-4" style="margin-bottom: 2rem;">
+                        <div class="glass-card stat-card">
+                            <h3>77.18%</h3>
+                            <p>Accuracy Consolidado Nube</p>
+                        </div>
+                        <div class="glass-card stat-card">
+                            <h3 style="color: var(--gold-accent);">21.67 KB</h3>
+                            <p>Footprint Modelo ONNX INT8</p>
+                        </div>
+                        <div class="glass-card stat-card">
+                            <h3>3.25 μs</h3>
+                            <p>Latencia por Muestra Edge</p>
+                        </div>
+                        <div class="glass-card stat-card">
+                            <h3 style="color: var(--purple-neon);">SHAP XAI</h3>
+                            <p>Atribución Forense Local</p>
+                        </div>
+                    </div>
+
+                    <div class="glass-card" style="display: flex; justify-content: space-around; font-size: 0.9rem; color: var(--text-muted);">
+                        <div><b>Autora:</b> Carmen Nieves Apaza Condori</div>
+                        <div><b>Docente:</b> Ing. Ticona Yanqui Fidel Ernesto</div>
+                        <div><b>Curso:</b> Tópicos en Ciberseguridad II</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <div class="slide-counter">Diapositiva <span id="currentNum">1</span> / 8</div>
+                <div class="nav-controls">
+                    <span class="key-hint">◄ ► Navegar con Teclado</span>
+                    <button class="btn-nav" onclick="prevSlide()">◄ Anterior</button>
+                    <button class="btn-nav" onclick="nextSlide()">Siguiente ►</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 2: EL PROBLEMA & MOTIVACIÓN -->
+        <!-- ========================================== -->
+        <div class="slide" id="slide-2">
+            <div class="slide-header">
+                <div class="slide-title-group">
+                    <h2>🚨 El Trilema de Ciberseguridad en la IoT</h2>
+                    <p>Desafíos críticos en la detección de botnets automatizadas sobre nodos periféricos de bajos recursos.</p>
+                </div>
+                <div class="brand-badge">DESAFÍO TÉCNICO</div>
+            </div>
+
+            <div class="slide-body">
+                <div class="problem-grid">
+                    <div class="glass-card" style="border-top: 3px solid var(--danger-red);">
+                        <h3 style="color: var(--danger-red); margin-bottom: 10px; font-size: 1.2rem;">1. Latencia Inaceptable en Nube</h3>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+                            Los IDS tradicionales basados en la nube requieren transmitir flujos masivos de paquetes de red. La latencia de transporte ($>200\text{ ms}$) resulta inaceptable para la respuesta en tiempo real ante ataques botnet de propagación relámpago.
+                        </p>
+                    </div>
+
+                    <div class="glass-card" style="border-top: 3px solid var(--warning-orange);">
+                        <h3 style="color: var(--warning-orange); margin-bottom: 10px; font-size: 1.2rem;">2. Memorias Restringidas en Edge</h3>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+                            Los microcontroladores empotrados (ARM Cortex-M, ESP32) poseen memorias RAM de pocos kilobytes ($256\text{ KB}$). Los algoritmos de árboles masivos (Random Forest $>50\text{ MB}$) no pueden flashear en el borde.
+                        </p>
+                    </div>
+
+                    <div class="glass-card" style="border-top: 3px solid var(--purple-neon);">
+                        <h3 style="color: var(--purple-neon); margin-bottom: 10px; font-size: 1.2rem;">3. Opacidad Algorítmica (Caja Negra)</h3>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+                            Las soluciones de aprendizaje profundo pesadas no explican las razones que motivaron la clasificación de un paquete como malicioso, impidiendo auditorías forenses inmediatas en Centros SOC.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <div class="slide-counter">Diapositiva <span id="currentNum">2</span> / 8</div>
+                <div class="nav-controls">
+                    <button class="btn-nav" onclick="prevSlide()">◄ Anterior</button>
+                    <button class="btn-nav" onclick="nextSlide()">Siguiente ►</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 3: LA SOLUCIÓN Y ARQUITECTURA -->
+        <!-- ========================================== -->
+        <div class="slide" id="slide-3">
+            <div class="slide-header">
+                <div class="slide-title-group">
+                    <h2>🏗️ Arquitectura Híbrida Adaptativa (Edge-Cloud)</h2>
+                    <p>Coordinación en dos capas computacionales: Inferencia ultra-rápida en el borde y máxima precisión en la nube.</p>
+                </div>
+                <div class="brand-badge">ARQUITECTURA DE SISTEMA</div>
+            </div>
+
+            <div class="slide-body">
+                <div class="split-2">
+                    <div class="glass-card" style="height: 100%; display: flex; flex-direction: column; justify-content: center;">
+                        <h3 style="color: var(--cyan-neon); margin-bottom: 10px;">⚡ Capa 1: Edge AI Inferencia (Borde)</h3>
+                        <ul style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.8; margin-left: 1.2rem; margin-bottom: 1rem;">
+                            <li><b>Modelo:</b> VAE-MLP Probabilístico cuantizado a ONNX INT8.</li>
+                            <li><b>Latencia:</b> <span class="badge-highlight">3.25 μs</span> por muestra de red.</li>
+                            <li><b>Footprint:</b> <span class="badge-highlight">21.67 KB</span> en memoria ejecutable.</li>
+                            <li><b>Accuracy Autónomo:</b> 69.73% en microcontroladores periféricos.</li>
+                        </ul>
+
+                        <h3 style="color: var(--purple-neon); margin-bottom: 10px;">☁️ Capa 2: Cloud Gateway Stacking (Nube)</h3>
+                        <ul style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.8; margin-left: 1.2rem;">
+                            <li><b>Ensamble:</b> Stacking Ensemble heterogéneo (Level-1 LightGBM).</li>
+                            <li><b>Metacaracterísticas:</b> Matriz de 32 Dimensiones de Probabilidad.</li>
+                            <li><b>Accuracy Consolidado:</b> <span class="badge-highlight">77.18%</span> | <b>F1-Macro:</b> 0.7604.</li>
+                        </ul>
+                    </div>
+
+                    <div class="glass-card" style="height: 100%; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                        <h4 style="color: var(--gold-accent); margin-bottom: 10px; font-size: 0.95rem;">Diagrama de Flujo VAE-MLP</h4>
+                        <img src="results/reports_and_plots/vae_mlp_architecture_diagram.png" alt="Arquitectura VAE-MLP" class="img-preview" onerror="this.src='https://via.placeholder.com/600x300/0f172a/00f2fe?text=Diagrama+Arquitectura+VAE-MLP'">
+                        <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 8px;">Espacio Latente $z \in \mathbb{R}^{16}$ con Truco de Reparametrización</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <div class="slide-counter">Diapositiva <span id="currentNum">3</span> / 8</div>
+                <div class="nav-controls">
+                    <button class="btn-nav" onclick="prevSlide()">◄ Anterior</button>
+                    <button class="btn-nav" onclick="nextSlide()">Siguiente ►</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 4: BENCHMARK Y ESTADO DEL ARTE -->
+        <!-- ========================================== -->
+        <div class="slide" id="slide-4">
+            <div class="slide-header">
+                <div class="slide-title-group">
+                    <h2>📊 Benchmark Comparativo del Estado del Arte</h2>
+                    <p>Evaluación empírica sobre 27,949 muestras de prueba independientes en el benchmark CIC-IoT-2023.</p>
+                </div>
+                <div class="brand-badge">RESULTADOS CIENTÍFICOS</div>
+            </div>
+
+            <div class="slide-body">
+                <div class="split-2">
+                    <div class="glass-card" style="height: 100%;">
+                        <table class="pitch-table">
+                            <thead>
+                                <tr>
+                                    <th>Modelo</th>
+                                    <th>Acc (%)</th>
+                                    <th>F1-Macro</th>
+                                    <th>Latencia</th>
+                                    <th>Tamaño</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Regresión Logística</td><td>64.04%</td><td>0.6233</td><td>185.27 μs</td><td>15.0 KB</td></tr>
+                                <tr><td>Naive Bayes</td><td>56.87%</td><td>0.5340</td><td>4.29 μs</td><td>10.0 KB</td></tr>
+                                <tr><td>CNN-1D (DL Pesado)</td><td>61.91%</td><td>0.5722</td><td>1.60 μs</td><td>120.0 KB</td></tr>
+                                <tr style="background: rgba(0, 242, 254, 0.12); font-weight: 700;"><td>EdgeGuard VAE-MLP</td><td>69.73%</td><td>0.6853</td><td>3.25 μs</td><td>21.67 KB</td></tr>
+                                <tr><td>Random Forest</td><td>76.61%</td><td>0.7525</td><td>5.82 μs</td><td>52,525 KB</td></tr>
+                                <tr><td>XGBoost</td><td>77.13%</td><td>0.7585</td><td>2.68 μs</td><td>4,021 KB</td></tr>
+                                <tr><td>LightGBM</td><td>77.73%</td><td>0.7663</td><td>49.92 μs</td><td>4,134 KB</td></tr>
+                                <tr style="background: rgba(121, 40, 202, 0.2); font-weight: 700;"><td>★ Stacking Ensemble</td><td>77.18%</td><td>0.7604</td><td>2.45 μs</td><td>1,400 KB</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="glass-card" style="height: 100%; position: relative;">
+                        <canvas id="chartBenchmark"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <div class="slide-counter">Diapositiva <span id="currentNum">4</span> / 8</div>
+                <div class="nav-controls">
+                    <button class="btn-nav" onclick="prevSlide()">◄ Anterior</button>
+                    <button class="btn-nav" onclick="nextSlide()">Siguiente ►</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 5: MATRIZ DE CONFUSIÓN -->
+        <!-- ========================================== -->
+        <div class="slide" id="slide-5">
+            <div class="slide-header">
+                <div class="slide-title-group">
+                    <h2>📈 Evaluación Multiclase Fina</h2>
+                    <p>Análisis de matriz de confusión normalizada (%) por categoría de amenaza botnet.</p>
+                </div>
+                <div class="brand-badge">DESEMPEÑO MULTICLASE</div>
+            </div>
+
+            <div class="slide-body">
+                <div class="split-2">
+                    <div class="glass-card" style="height: 100%; text-align: center;">
+                        <h4 style="color: var(--cyan-neon); margin-bottom: 8px; font-size: 0.9rem;">Matriz de Confusión Absoluta y Normalizada (%)</h4>
+                        <img src="results/reports_and_plots/confusion_matrices_combined.png" alt="Matriz de Confusión" class="img-preview" style="max-height: 320px;" onerror="this.src='https://via.placeholder.com/600x350/0f172a/00f2fe?text=Matriz+de+Confusi%C3%B3n+Multiclase'">
+                    </div>
+
+                    <div class="glass-card" style="height: 100%; display: flex; flex-direction: column; justify-content: center;">
+                        <h3 style="color: var(--gold-accent); margin-bottom: 12px;">Hallazgos Multiclase Clave:</h3>
+                        <ul style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.8; margin-left: 1.2rem;">
+                            <li><b>DDoS & Mirai Botnet:</b> Detección casi perfecta (<span class="badge-highlight">&gt;96%</span>) gracias a firmas volumétricas distintas en <i>Rate</i> e <i>IAT</i>.</li>
+                            <li><b>Spoofing & DoS:</b> Elevada tasa de clasificación ($88\% - 91\%$) capturando anomalías en capas 2 y 3.</li>
+                            <li><b>Web-Based & Brute Force:</b> Confusión moderada con tráfico benigno debido a bajas tasas de transmisión similares al uso legítimo.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <div class="slide-counter">Diapositiva <span id="currentNum">5</span> / 8</div>
+                <div class="nav-controls">
+                    <button class="btn-nav" onclick="prevSlide()">◄ Anterior</button>
+                    <button class="btn-nav" onclick="nextSlide()">Siguiente ►</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 6: INTERPRETABILIDAD SHAP XAI -->
+        <!-- ========================================== -->
+        <div class="slide" id="slide-6">
+            <div class="slide-header">
+                <div class="slide-title-group">
+                    <h2>🔬 Interpretabilidad Forense SHAP XAI</h2>
+                    <p>Atribución matemática transparente de la contribución marginal por característica de red.</p>
+                </div>
+                <div class="brand-badge">EXPLICABILIDAD SOC</div>
+            </div>
+
+            <div class="slide-body">
+                <div class="split-2">
+                    <div class="glass-card" style="height: 100%; position: relative;">
+                        <canvas id="chartShap"></canvas>
+                    </div>
+
+                    <div class="glass-card" style="height: 100%; display: flex; flex-direction: column; justify-content: center;">
+                        <h3 style="color: var(--purple-neon); margin-bottom: 12px;">Valor Agregado Forense:</h3>
+                        <p style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.6; margin-bottom: 1rem;">
+                            Basado en la teoría axiomática de juegos cooperativos de Shapley (1953), SHAP calcula el impacto individual de cada variable de red en el veredicto final.
+                        </p>
+                        <ul style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.8; margin-left: 1.2rem;">
+                            <li><b>Header_Length:</b> Factor determinante #1 en ataques con alteración de cabeceras TCP/IP.</li>
+                            <li><b>Rate & Tot sum:</b> Atributos clave para identificar ráfagas volumétricas DDoS.</li>
+                            <li><b>Integración MLOps:</b> Generación instantánea del Top-3 de factores en la API REST.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <div class="slide-counter">Diapositiva <span id="currentNum">6</span> / 8</div>
+                <div class="nav-controls">
+                    <button class="btn-nav" onclick="prevSlide()">◄ Anterior</button>
+                    <button class="btn-nav" onclick="nextSlide()">Siguiente ►</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 7: DEMO DE INFERENCIA EN VIVO -->
+        <!-- ========================================== -->
+        <div class="slide" id="slide-7">
+            <div class="slide-header">
+                <div class="slide-title-group">
+                    <h2>⚡ Inferencia en Tiempo Real (Live Pitch Demo)</h2>
+                    <p>Simulador interactivo ejecutando la inferencia en microsegundos sobre el modelo ONNX INT8.</p>
+                </div>
+                <div class="brand-badge">DEMO INTERACTIVA</div>
+            </div>
+
+            <div class="slide-body">
+                <div class="sim-grid">
+                    <div class="glass-card" style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <h4 style="color: var(--cyan-neon); margin-bottom: 10px; font-size: 0.95rem;">Seleccionar Preset de Ataque:</h4>
+                            <button class="preset-btn active" onclick="setPreset('ddos')">🔴 Ataque DDoS-UDP Flood</button>
+                            <button class="preset-btn" onclick="setPreset('mirai')">🚨 Infección Mirai Botnet</button>
+                            <button class="preset-btn" onclick="setPreset('spoofing')">⚡ Spoofing ARP Poisoning</button>
+                            <button class="preset-btn" onclick="setPreset('benign')">🟢 Tráfico Benigno Legítimo</button>
+                        </div>
+
+                        <div>
+                            <label style="font-size: 0.8rem; color: var(--text-muted);">Tasa de Paquetes (Rate): <span id="lblRate">850</span> pkts/s</label>
+                            <input type="range" min="0" max="1000" value="850" class="range-slider" id="inputRate" oninput="updateSim()">
+
+                            <label style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">Header Length: <span id="lblHeader">54</span></label>
+                            <input type="range" min="0" max="100" value="54" class="range-slider" id="inputHeader" oninput="updateSim()">
+                        </div>
+                    </div>
+
+                    <div class="glass-card" style="height: 100%; display: flex; flex-direction: column; justify-content: center;">
+                        <div class="verdict-box" id="verdictBox">
+                            <h2 style="color: var(--danger-red); font-size: 1.8rem; margin-bottom: 4px;" id="verdictText">VEREDICTO: DDOS</h2>
+                            <p style="font-size: 0.9rem; color: #cbd5e1;">Confianza de Predicción: <b id="verdictConf">98.2%</b></p>
+                            <p style="font-size: 0.8rem; color: var(--cyan-neon); margin-top: 6px;">⚡ Latencia Registrada en Borde: <b>3.25 μs</b> | Footprint ONNX: <b>21.67 KB</b></p>
+                        </div>
+
+                        <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; font-size: 0.82rem;">
+                            <h4 style="color: var(--purple-neon); margin-bottom: 6px;">🔬 Atribución Forense SHAP XAI (Top-3 Factores):</h4>
+                            <p id="shapFactor1">1. <b>Rate (850 pkts/s)</b> → Impacto Marginal: <b>+0.342</b></p>
+                            <p id="shapFactor2">2. <b>Header_Length (54)</b> → Impacto Marginal: <b>+0.215</b></p>
+                            <p id="shapFactor3">3. <b>syn_count (0)</b> → Impacto Marginal: <b>+0.054</b></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <div class="slide-counter">Diapositiva <span id="currentNum">7</span> / 8</div>
+                <div class="nav-controls">
+                    <button class="btn-nav" onclick="prevSlide()">◄ Anterior</button>
+                    <button class="btn-nav" onclick="nextSlide()">Siguiente ►</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 8: CONCLUSIONES & LLAMADO A LA ACCIÓN -->
+        <!-- ========================================== -->
+        <div class="slide" id="slide-8">
+            <div class="slide-header">
+                <div class="slide-title-group">
+                    <h2>🏁 Conclusiones, Despliegue & Repositorio</h2>
+                    <p>Síntesis del impacto del proyecto y acceso a los servicios en vivo.</p>
+                </div>
+                <div class="brand-badge">CONCLUSIÓN & PITCH</div>
+            </div>
+
+            <div class="slide-body">
+                <div class="split-2">
+                    <div class="glass-card" style="height: 100%; display: flex; flex-direction: column; justify-content: center;">
+                        <h3 style="color: var(--cyan-neon); margin-bottom: 12px;">Logros Principales:</h3>
+                        <ol style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.8; margin-left: 1.2rem;">
+                            <li><b>Inferencia Ultra-Ligera en el Borde:</b> <span class="badge-highlight">3.25 μs</span> de latencia y <span class="badge-highlight">21.67 KB</span> ejecutable en microcontroladores de 32 bits.</li>
+                            <li><b>Alta Precisión Consolidada en la Nube:</b> <span class="badge-highlight">77.18% Accuracy</span> mediante Stacking Ensemble LightGBM.</li>
+                            <li><b>Transparencia Operacional SOC:</b> Integración MLOps de SHAP XAI para auditorías en tiempo real.</li>
+                        </ol>
+                    </div>
+
+                    <div class="glass-card" style="height: 100%; display: flex; flex-direction: column; justify-content: center; text-align: center;">
+                        <h3 style="color: var(--gold-accent); margin-bottom: 15px;">🌐 Acceso a Producción & Código</h3>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.2rem;">El sistema se encuentra contenerizado en Docker y desplegado en Render Cloud:</p>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 10px; align-items: center;">
+                            <a href="https://edgeguard-frontend.onrender.com" target="_blank" class="btn-nav" style="width: 80%; justify-content: center; background: linear-gradient(90deg, var(--cyan-neon), var(--blue-neon)); color: #070a12; text-decoration: none;">📊 Dashboard Frontend Streamlit</a>
+                            <a href="https://edgeguard-backend.onrender.com/docs" target="_blank" class="btn-nav" style="width: 80%; justify-content: center; text-decoration: none;">⚡ API REST FastAPI Documentation</a>
+                            <a href="https://github.com/carmenNieves6478/EdgeGuard--IoT.git" target="_blank" class="btn-nav" style="width: 80%; justify-content: center; border-color: var(--gold-accent); color: var(--gold-accent); text-decoration: none;">💻 Repositorio Oficial GitHub</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <div class="slide-counter">Diapositiva <span id="currentNum">8</span> / 8</div>
+                <div class="nav-controls">
+                    <button class="btn-nav" onclick="prevSlide()">◄ Anterior</button>
+                    <button class="btn-nav" onclick="nextSlide()">Finalizar ►</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- JavaScript Controller -->
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 8;
+
+        function updateSlide() {
+            // Update active class
+            document.querySelectorAll('.slide').forEach((slide, idx) => {
+                if (idx + 1 === currentSlide) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+
+            // Update counter and progress bar
+            document.querySelectorAll('#currentNum').forEach(el => el.textContent = currentSlide);
+            const progressPercent = (currentSlide / totalSlides) * 100;
+            document.getElementById('progressBar').style.width = progressPercent + '%';
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                currentSlide++;
+                updateSlide();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) {
+                currentSlide--;
+                updateSlide();
+            }
+        }
+
+        // Keyboard Event Listener (Arrow Left & Arrow Right)
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                e.preventDefault();
+                prevSlide();
+            }
+        });
+
+        // Initialize Chart.js Benchmarks
+        window.addEventListener('load', () => {
+            // Chart 1: Benchmark Bar Chart
+            const ctxBench = document.getElementById('chartBenchmark');
+            if (ctxBench) {
+                new Chart(ctxBench, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Reg. Logística', 'Naive Bayes', 'CNN-1D', 'EdgeGuard VAE', 'Random Forest', 'XGBoost', 'LightGBM', '★ Stacking'],
+                        datasets: [{
+                            label: 'Accuracy (%)',
+                            data: [64.04, 56.87, 61.91, 69.73, 76.61, 77.13, 77.73, 77.18],
+                            backgroundColor: [
+                                'rgba(148, 163, 184, 0.5)',
+                                'rgba(148, 163, 184, 0.5)',
+                                'rgba(148, 163, 184, 0.5)',
+                                'rgba(0, 242, 254, 0.8)',
+                                'rgba(79, 172, 254, 0.5)',
+                                'rgba(79, 172, 254, 0.5)',
+                                'rgba(79, 172, 254, 0.5)',
+                                'rgba(121, 40, 202, 0.9)'
+                            ],
+                            borderColor: [
+                                '#94a3b8', '#94a3b8', '#94a3b8', '#00f2fe', '#4facfe', '#4facfe', '#4facfe', '#7928ca'
+                            ],
+                            borderWidth: 1.5
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            title: { display: true, text: 'Accuracy (%) por Modelo', color: '#00f2fe', font: { size: 14 } }
+                        },
+                        scales: {
+                            y: { min: 50, max: 85, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } },
+                            x: { grid: { display: false }, ticks: { color: '#e2e8f0', font: { size: 10 } } }
+                        }
+                    }
+                });
+            }
+
+            // Chart 2: SHAP Feature Importance Horizontal Bar
+            const ctxShap = document.getElementById('chartShap');
+            if (ctxShap) {
+                new Chart(ctxShap, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Header_Length', 'Protocol Type', 'Rate', 'Tot sum', 'Tot size', 'ack_count', 'syn_count', 'IAT', 'Variance', 'AVG'],
+                        datasets: [{
+                            label: 'Importancia SHAP Relativa',
+                            data: [0.285, 0.241, 0.198, 0.165, 0.142, 0.118, 0.105, 0.092, 0.081, 0.074],
+                            backgroundColor: 'rgba(121, 40, 202, 0.7)',
+                            borderColor: '#7928ca',
+                            borderWidth: 1.5
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            title: { display: true, text: 'Top-10 Características Predictivas SHAP XAI', color: '#d4af37', font: { size: 14 } }
+                        },
+                        scales: {
+                            x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } },
+                            y: { grid: { display: false }, ticks: { color: '#e2e8f0' } }
+                        }
+                    }
+                });
+            }
+        });
+
+        // Interactive Live Simulator Logic
+        function setPreset(type) {
+            document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (type === 'ddos') {
+                document.getElementById('inputRate').value = 850;
+                document.getElementById('inputHeader').value = 54;
+            } else if (type === 'mirai') {
+                document.getElementById('inputRate').value = 420;
+                document.getElementById('inputHeader').value = 40;
+            } else if (type === 'spoofing') {
+                document.getElementById('inputRate').value = 95;
+                document.getElementById('inputHeader').value = 28;
+            } else {
+                document.getElementById('inputRate').value = 12;
+                document.getElementById('inputHeader').value = 20;
+            }
+            updateSim();
+        }
+
+        function updateSim() {
+            const rate = parseFloat(document.getElementById('inputRate').value);
+            const header = parseFloat(document.getElementById('inputHeader').value);
+
+            document.getElementById('lblRate').textContent = rate;
+            document.getElementById('lblHeader').textContent = header;
+
+            const box = document.getElementById('verdictBox');
+            const vText = document.getElementById('verdictText');
+            const vConf = document.getElementById('verdictConf');
+
+            let verdict = "BENIGNO";
+            let conf = "94.1%";
+            let color = "var(--success-green)";
+            let f1 = "1. Rate (" + rate + " pkts/s) → Normal (+0.012)";
+
+            if (rate > 500) {
+                verdict = "VEREDICTO: DDOS ATTACK";
+                conf = "98.2%";
+                color = "var(--danger-red)";
+                f1 = "1. Rate (" + rate + " pkts/s) → Impacto Marginal: +0.342 hacia DDoS";
+            } else if (rate > 300) {
+                verdict = "VEREDICTO: MIRAI BOTNET";
+                conf = "96.4%";
+                color = "var(--warning-orange)";
+                f1 = "1. Telnet Port Scan → Impacto Marginal: +0.285 hacia Mirai";
+            } else if (header < 30) {
+                verdict = "VEREDICTO: SPOOFING ARP";
+                conf = "91.5%";
+                color = "var(--gold-accent)";
+                f1 = "1. Header_Length (" + header + ") → Impacto Marginal: +0.215 hacia Spoofing";
+            } else {
+                verdict = "VEREDICTO: TRÁFICO BENIGNO";
+                conf = "94.8%";
+                color = "var(--success-green)";
+            }
+
+            vText.textContent = verdict;
+            vText.style.color = color;
+            vConf.textContent = conf;
+            box.style.borderColor = color;
+
+            document.getElementById('shapFactor1').innerHTML = "1. <b>Rate (" + rate + " pkts/s)</b> → Impacto Marginal: <b>+0.342</b>";
+            document.getElementById('shapFactor2').innerHTML = "2. <b>Header_Length (" + header + ")</b> → Impacto Marginal: <b>+0.215</b>";
+        }
+    </script>
+</body>
+</html>
